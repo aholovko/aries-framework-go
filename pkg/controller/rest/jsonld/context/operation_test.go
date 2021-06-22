@@ -40,7 +40,7 @@ func TestNew(t *testing.T) {
 
 	t.Run("Fail to create jsonld context command", func(t *testing.T) {
 		storage := mockstorage.NewMockStoreProvider()
-		storage.FailNamespace = jsonld.ContextsDBName
+		storage.FailNamespace = jsonld.ContextsDB
 
 		op, err := jsonldcontextrest.New(&mockprovider.Provider{
 			StorageProviderValue: storage,

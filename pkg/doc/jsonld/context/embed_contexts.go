@@ -4,44 +4,46 @@ Copyright SecureKey Technologies Inc. All Rights Reserved.
 SPDX-License-Identifier: Apache-2.0
 */
 
-package jsonld
+package context
 
-// nolint:golint
-import _ "embed"
+import (
+	_ "embed" //nolint:gci // required for go:embed
+)
 
-// nolint:gochecknoglobals // JSON-LD context documents embedded into Go binary.
+// nolint:gochecknoglobals // embedded JSON-LD contexts
 var (
-	//go:embed contexts/third_party/w3.org/credentials_v1.jsonld
+	//go:embed third_party/w3.org/credentials_v1.jsonld
 	w3orgCredentials []byte
-	//go:embed contexts/third_party/w3.org/did_v1.jsonld
+	//go:embed third_party/w3.org/did_v1.jsonld
 	w3orgDID []byte
-	//go:embed contexts/third_party/w3c-ccg.github.io/did_v0.11.jsonld
+	//go:embed third_party/w3c-ccg.github.io/did_v0.11.jsonld
 	w3idDIDv011 []byte
-	//go:embed contexts/third_party/w3c-ccg.github.io/did_v1.jsonld
+	//go:embed third_party/w3c-ccg.github.io/did_v1.jsonld
 	w3idDIDv1 []byte
-	//go:embed contexts/third_party/w3c-ccg.github.io/did_docres_v1.jsonld
-	w3idDIDDocResv1 []byte
-	//go:embed contexts/third_party/w3c-ccg.github.io/ldp-bbs2020_v1.jsonld
+	//go:embed third_party/w3c-ccg.github.io/did_docres_v1.jsonld
+	w3idDIDDocRes []byte
+	//go:embed third_party/w3c-ccg.github.io/ldp-bbs2020_v1.jsonld
 	ldpBBS2020 []byte
-	//go:embed contexts/third_party/w3c-ccg.github.io/lds-jws2020_v1.jsonld
+	//go:embed third_party/w3c-ccg.github.io/lds-jws2020_v1.jsonld
 	ldsJWS2020 []byte
-	//go:embed contexts/third_party/w3c-ccg.github.io/security_v1.jsonld
+	//go:embed third_party/w3c-ccg.github.io/security_v1.jsonld
 	securityV1 []byte
-	//go:embed contexts/third_party/w3c-ccg.github.io/security_v2.jsonld
+	//go:embed third_party/w3c-ccg.github.io/security_v2.jsonld
 	securityV2 []byte
-	//go:embed contexts/third_party/w3c-ccg.github.io/revocationList2020.jsonld
+	//go:embed third_party/w3c-ccg.github.io/revocationList2020.jsonld
 	revocationList2020 []byte
-	//go:embed contexts/third_party/digitalbazaar.github.io/ed25519-signature-2018-v1.jsonld
+	//go:embed third_party/digitalbazaar.github.io/ed25519-signature-2018-v1.jsonld
 	ed255192018 []byte
-	//go:embed contexts/third_party/identity.foundation/presentation-submission_v1.jsonld
+	//go:embed third_party/identity.foundation/presentation-submission_v1.jsonld
 	presentationSubmission []byte
-	//go:embed contexts/third_party/ns.did.ai/x25519-2019_v1.jsonld
+	//go:embed third_party/ns.did.ai/x25519-2019_v1.jsonld
 	x255192019 []byte
-	//go:embed contexts/third_party/ns.did.ai/secp256k1-2019_v1.jsonld
+	//go:embed third_party/ns.did.ai/secp256k1-2019_v1.jsonld
 	secp256k12019 []byte
 )
 
-var embedContexts = []ContextDocument{ //nolint:gochecknoglobals
+// Embedded contains JSON-LD contexts embedded into a Go binary.
+var Embedded = []*Document{ //nolint:gochecknoglobals
 	{
 		URL:         "https://www.w3.org/2018/credentials/v1",
 		DocumentURL: "https://www.w3.org/2018/credentials/v1",
@@ -65,7 +67,7 @@ var embedContexts = []ContextDocument{ //nolint:gochecknoglobals
 	{
 		URL:         "https://w3id.org/did-resolution/v1",
 		DocumentURL: "https://w3c-ccg.github.io/did-resolution/contexts/did-resolution-v1.json",
-		Content:     w3idDIDDocResv1,
+		Content:     w3idDIDDocRes,
 	},
 	{
 		URL:         "https://w3id.org/security/bbs/v1",

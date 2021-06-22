@@ -12,6 +12,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/hyperledger/aries-framework-go/pkg/doc/jsonld"
+	jsonldcontext "github.com/hyperledger/aries-framework-go/pkg/doc/jsonld/context"
 	"net/http"
 	"strings"
 	"syscall/js"
@@ -80,6 +82,7 @@ type ariesStartOpts struct {
 	TransportReturnRoute string   `json:"transport-return-route"`
 	LogLevel             string   `json:"log-level"`
 	DBNamespace          string   `json:"db-namespace"`
+	JSONLDRemoteSources  []string `json:"jsonld-remote-source"`
 }
 
 // main registers the 'handleMsg' function in the JS context's global scope to receive commands.
@@ -401,6 +404,20 @@ func ariesOpts(opts *ariesStartOpts) ([]aries.Option, error) {
 		options = append(options, rsopts...)
 	}
 
+	if len(opts.JSONLDRemoteSources) > 0 {
+		loaderOpts, err := getDocumentLoaderOpts(opts.JSONLDRemoteSources)
+		if err != nil {
+			return nil, fmt.Errorf("failed to prepate document loader opts: %w", err)
+		}
+
+		loader, err := jsonld.NewDocumentLoader(store, loaderOpts...)
+		if err != nil {
+			return nil, fmt.Errorf("failed to create document loader: %w", err)
+		}
+
+		options = append(options, aries.WithJSONLDDocumentLoader(loader))
+	}
+
 	return options, nil
 }
 
@@ -424,6 +441,28 @@ func getResolverOpts(httpResolvers []string) ([]aries.Option, error) {
 
 			opts = append(opts, aries.WithVDR(httpVDR))
 		}
+	}
+
+	return opts, nil
+}
+
+func getDocumentLoaderOpts(sources []string) ([]jsonld.DocumentLoaderOpts, error) {
+	var opts []jsonld.DocumentLoaderOpts
+
+	const numPartsRemoteSourceOption = 2
+
+	for _, source := range sources {
+		s := strings.Split(source, "@") // provider_id@endpoint
+		if len(s) != numPartsRemoteSourceOption {
+			return nil, fmt.Errorf("invalid JSON-LD remote source option found")
+		}
+
+		p, err := jsonldcontext.NewRemoteProvider(s[0], s[1])
+		if err != nil {
+			return nil, fmt.Errorf("create JSON-LD remote provider: %w", err)
+		}
+
+		opts = append(opts, jsonld.WithRemoteProvider(p))
 	}
 
 	return opts, nil

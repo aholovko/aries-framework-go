@@ -52,7 +52,7 @@ type Command struct {
 
 // New returns a new JSON-LD context command instance.
 func New(p provider) (*Command, error) {
-	store, err := p.StorageProvider().OpenStore(jsonld.ContextsDBName)
+	store, err := p.StorageProvider().OpenStore(jsonld.ContextsDB)
 	if err != nil {
 		return nil, fmt.Errorf("open store: %w", err)
 	}
