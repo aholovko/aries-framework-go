@@ -16,7 +16,7 @@ require (
 	github.com/golang/protobuf v1.5.2
 	github.com/google/tink/go v1.6.1-0.20210519071714-58be99b3c4d0
 	github.com/google/uuid v1.1.2
-	github.com/gorilla/mux v1.7.3
+	github.com/gorilla/mux v1.8.0
 	github.com/hyperledger/aries-framework-go/component/storage/edv v0.0.0-20210708130136-17663938344d
 	github.com/hyperledger/aries-framework-go/component/storageutil v0.0.0-20210708130136-17663938344d
 	github.com/hyperledger/aries-framework-go/spi v0.0.0-20210708130136-17663938344d
